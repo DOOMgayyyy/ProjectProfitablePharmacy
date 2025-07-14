@@ -48,7 +48,7 @@ def get_product_data(url):
         if meta_og_image and meta_og_image.get('content'):
             image_url = meta_og_image['content']
 
-    # Извлекаем цену - новый подход
+    # Извлекаем цену - новый подхо
     price = None
     price_container = soup.find('div', class_='product-card__price')
     
