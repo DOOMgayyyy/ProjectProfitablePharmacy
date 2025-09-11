@@ -9,7 +9,8 @@ DB_CONFIG = {
     'user': os.getenv('POSTGRES_USER'),
     'password': os.getenv('POSTGRES_PASSWORD'),
     'database': os.getenv('POSTGRES_DB'),
-    'host': 'localhost'
+    'host': '2.tcp.eu.ngrok.io', # <-- ИЗМЕНЕНО
+    'port': 10329              # <-- ДОБАВЛЕНО
 }
 
 # --- Настройки парсера ---
@@ -22,3 +23,4 @@ URLS_DIR = 'parsed_urls' # <--- ДОБАВЬТЕ ЭТУ СТРОКУ
 
 # --- Настройки для сохранения изображений (если понадобится в будущем) ---
 IMAGES_DIR = 'static/images/products'
+
