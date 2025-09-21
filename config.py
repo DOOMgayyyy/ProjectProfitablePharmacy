@@ -9,8 +9,8 @@ DB_CONFIG = {
     'user': os.getenv('POSTGRES_USER'),
     'password': os.getenv('POSTGRES_PASSWORD'),
     'database': os.getenv('POSTGRES_DB'),
-    'host': '2.tcp.eu.ngrok.io', # <-- ИЗМЕНЕНО
-    'port': 10329              # <-- ДОБАВЛЕНО
+    'host': '5.tcp.eu.ngrok.io', # <-- ИЗМЕНЕНО
+    'port': 12031              # <-- ДОБАВЛЕНО
 }
 
 # --- Настройки парсера ---

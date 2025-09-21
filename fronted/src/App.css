@@ -43,45 +43,6 @@ h1, h2, h3 {
   gap: 20px;
 }
 
-.categories-button {
-  padding: 10px 20px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-.categories-button:hover {
-  background-color: #45a049;
-}
-
-.categories-list {
-  background-color: #f0f0f0;
-  padding: 15px;
-  border-radius: 8px;
-}
-
-.categories-list ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.categories-list li {
-  background-color: #ddd;
-  padding: 8px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.categories-list li:hover {
-  background-color: #ccc;
-}
 
 .top-products-section {
   margin-top: 20px;

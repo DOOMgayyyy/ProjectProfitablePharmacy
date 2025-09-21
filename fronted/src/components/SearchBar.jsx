@@ -114,6 +114,7 @@ const SearchBar = () => {
       apiSuggestions = apiSuggestions.map(item => ({
         ...item,
         name: item.originalName,
+        id: item.id, // Сохраняем ID для прямого перехода к товару
         price: item.price ? String(item.price).replace(/₽/g, '').trim() : '0'
       }));
     } catch (error) {
@@ -235,8 +236,20 @@ const SearchBar = () => {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    setQuery(suggestion.name);
-    handleSearch(suggestion.name);
+    // Если у подсказки есть ID, переходим напрямую к товару
+    if (suggestion.id) {
+      navigate(`/medicine/${suggestion.id}`, {
+        state: {
+          searchQuery: query,
+          fromSearch: true
+        }
+      });
+      setShowSuggestions(false);
+    } else {
+      // Иначе выполняем обычный поиск
+      setQuery(suggestion.name);
+      handleSearch(suggestion.name);
+    }
   };
 
   const handleRecentClick = (recent) => {
@@ -289,11 +302,6 @@ const SearchBar = () => {
                   onClick={() => handleSuggestionClick(suggestion)}
                 >
                   <div className="suggestion-name">{suggestion.name}</div>
-                  <div className="suggestion-price">
-                    {suggestion.price}
-                    {!suggestion.price.includes('₽') && <span className="currency-symbol">₽</span>}
-                  </div>
-                  <div className="suggestion-pharmacy">{suggestion.pharmacy_name}</div>
                   {suggestion.type && (
                     <div className="suggestion-type">
                       {suggestion.type === 'popular' ? '🔥' : '🕒'}

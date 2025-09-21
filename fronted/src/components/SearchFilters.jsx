@@ -6,10 +6,9 @@ const SearchFilters = ({
   onFilterChange, 
   onApplyFilters, 
   onClearFilters, 
-  categories = [],
   isVisible = false 
 }) => {
-  const hasActiveFilters = filters.minPrice || filters.maxPrice || filters.categoryId || filters.sortBy !== 'relevance';
+  const hasActiveFilters = filters.minPrice || filters.maxPrice || filters.sortBy !== 'relevance';
 
   return (
     <div className={`search-filters ${isVisible ? 'visible' : ''}`}>
@@ -66,21 +65,30 @@ const SearchFilters = ({
           <div className="price-presets">
             <button 
               type="button"
-              onClick={() => onFilterChange({ target: { name: 'minPrice', value: '0' } })}
+              onClick={() => {
+                onFilterChange({ target: { name: 'minPrice', value: '0' } });
+                onFilterChange({ target: { name: 'maxPrice', value: '100' } });
+              }}
               className="price-preset"
             >
               До 100₽
             </button>
             <button 
               type="button"
-              onClick={() => onFilterChange({ target: { name: 'minPrice', value: '100' } })}
+              onClick={() => {
+                onFilterChange({ target: { name: 'minPrice', value: '100' } });
+                onFilterChange({ target: { name: 'maxPrice', value: '500' } });
+              }}
               className="price-preset"
             >
               100-500₽
             </button>
             <button 
               type="button"
-              onClick={() => onFilterChange({ target: { name: 'minPrice', value: '500' } })}
+              onClick={() => {
+                onFilterChange({ target: { name: 'minPrice', value: '500' } });
+                onFilterChange({ target: { name: 'maxPrice', value: '' } });
+              }}
               className="price-preset"
             >
               500₽+
@@ -89,60 +97,6 @@ const SearchFilters = ({
         </div>
       </div>
 
-      <div className="filter-section">
-        <label className="filter-label">Категория</label>
-        <select 
-          name="categoryId" 
-          value={filters.categoryId} 
-          onChange={onFilterChange}
-          className="filter-select"
-        >
-          <option value="">Все категории</option>
-          {categories.map(category => (
-            <option key={category.id} value={category.id}>
-              {category.name_ru || category.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="filter-section">
-        <label className="filter-label">Наличие</label>
-        <div className="checkbox-group">
-          <label className="checkbox-label">
-            <input
-              type="checkbox"
-              name="inStock"
-              checked={filters.inStock || false}
-              onChange={(e) => onFilterChange({ 
-                target: { name: 'inStock', value: e.target.checked } 
-              })}
-              className="checkbox-input"
-            />
-            <span className="checkbox-custom"></span>
-            Только в наличии
-          </label>
-        </div>
-      </div>
-
-      <div className="filter-section">
-        <label className="filter-label">Аптеки</label>
-        <div className="checkbox-group">
-          <label className="checkbox-label">
-            <input
-              type="checkbox"
-              name="onlineOnly"
-              checked={filters.onlineOnly || false}
-              onChange={(e) => onFilterChange({ 
-                target: { name: 'onlineOnly', value: e.target.checked } 
-              })}
-              className="checkbox-input"
-            />
-            <span className="checkbox-custom"></span>
-            Только онлайн-аптеки
-          </label>
-        </div>
-      </div>
 
       <div className="filters-actions">
         <button onClick={onApplyFilters} className="apply-filters-btn">

@@ -1,0 +1,343 @@
+.product-details-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-details-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.product-main {
+  display: flex;
+  gap: 3rem;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.product-image-section {
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.product-image {
+  width: 100%;
+  max-width: 300px;
+  height: 300px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+}
+
+.product-image-placeholder {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  color: #6c757d;
+}
+
+.product-image-placeholder svg {
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.product-image-placeholder span {
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.product-info-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.product-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.product-description {
+  font-size: 1rem;
+  color: #6c757d;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.pharmacies-section {
+  margin-top: 1.5rem;
+}
+
+.pharmacies-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0 0 1rem 0;
+}
+
+.description-section {
+  margin-top: 1.5rem;
+}
+
+.description-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0 0 1rem 0;
+}
+
+.expand-description-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.expand-description-btn:hover {
+  color: #0056b3;
+}
+
+.pharmacies-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pharmacy-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+}
+
+.pharmacy-item:hover {
+  background: #e9ecef;
+  border-color: #dee2e6;
+}
+
+.pharmacy-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pharmacy-name {
+  font-weight: 600;
+  color: #212529;
+  font-size: 1rem;
+}
+
+.pharmacy-price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #28a745;
+}
+
+.availability-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.availability-status.available {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.product-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 1rem;
+}
+
+.back-to-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.back-to-search:hover {
+  background: #0056b3;
+  color: white;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.back-to-search svg {
+  transition: transform 0.2s ease;
+}
+
+.back-to-search:hover svg {
+  transform: translateX(-2px);
+}
+
+/* Loading and Error States */
+.loading-container,
+.error-container,
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+  padding: 3rem;
+  margin: 2rem;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-container h2,
+.not-found-container h2 {
+  color: #dc3545;
+  margin-bottom: 1rem;
+}
+
+.error-container p,
+.not-found-container p {
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #6c757d;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background: #5a6268;
+  color: white;
+  text-decoration: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .product-details-container {
+    padding: 1rem;
+  }
+  
+  .product-main {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1.5rem;
+  }
+  
+  .product-image-section {
+    flex: none;
+    align-items: center;
+  }
+  
+  .product-image,
+  .product-image-placeholder {
+    max-width: 250px;
+    height: 250px;
+  }
+  
+  .product-title {
+    font-size: 1.5rem;
+  }
+  
+  .pharmacy-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .pharmacy-info {
+    width: 100%;
+  }
+  
+  .availability-status {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-details-container {
+    padding: 0.5rem;
+  }
+  
+  .product-main {
+    padding: 1rem;
+  }
+  
+  .product-image,
+  .product-image-placeholder {
+    max-width: 200px;
+    height: 200px;
+  }
+  
+  .product-title {
+    font-size: 1.25rem;
+  }
+  
+  .pharmacies-section h3,
+  .description-section h3 {
+    font-size: 1.1rem;
+  }
+  
+  .expand-description-btn {
+    font-size: 0.85rem;
+  }
+}

@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import MedicineCard from './MedicineCard';
 import './SearchResults.css';
 
-const SearchResults = ({ results, isLoading, error, query }) => {
+const SearchResults = ({ results, isLoading, error, query, onClearFilters }) => {
   if (isLoading) {
     return (
       <div className="loading-container">
@@ -28,6 +29,20 @@ const SearchResults = ({ results, isLoading, error, query }) => {
           <li>Поискать по активному веществу</li>
           <li>Очистить фильтры</li>
         </ul>
+        <div className="no-results-actions">
+          {onClearFilters && (
+            <button onClick={onClearFilters} className="clear-all-filters">
+              Очистить все фильтры
+            </button>
+          )}
+          <Link to="/" className="home-button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9,22 9,12 15,12 15,22"/>
+            </svg>
+            На главную
+          </Link>
+        </div>
       </div>
     );
   }
@@ -38,8 +53,9 @@ const SearchResults = ({ results, isLoading, error, query }) => {
         <MedicineCard
           key={medicine.id}
           medicine={medicine}
-          onClick={() => window.location.href = `/medicine/${medicine.id}`}
           showDescription={false}
+          searchQuery={query}
+          hidePrice={true}
         />
       ))}
     </div>

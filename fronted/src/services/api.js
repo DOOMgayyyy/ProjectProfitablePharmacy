@@ -1,7 +1,17 @@
+
 import axios from 'axios';
 
-// Prefer env-configured URL, fallback to Vite proxy path during dev
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+// Универсальное определение API_URL для Node.js и Vite
+let API_URL = '/api';
+try {
+  if (import.meta && import.meta.env && import.meta.env.VITE_API_URL) {
+    API_URL = import.meta.env.VITE_API_URL;
+  }
+} catch (e) {
+  if (typeof process !== 'undefined' && process.env && process.env.VITE_API_URL) {
+    API_URL = process.env.VITE_API_URL;
+  }
+}
 
 const apiClient = axios.create({
   baseURL: API_URL,
@@ -113,7 +123,13 @@ export const getCategoryHierarchy = async () => {
 
 // Топ-товары
 export const getTopProducts = async () => {
-  return [];
+  try {
+    const response = await apiClient.get('/top-products');
+    return response.data;
+  } catch (error) {
+    console.error('Top products error:', error);
+    return [];
+  }
 };
 
 // Популярные поиски

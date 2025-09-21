@@ -1,0 +1,41 @@
+.footer {
+  background: #e94a49;
+  border-top: 1px solid #d32f2f;
+  padding: 24px 20px;
+  margin-top: auto;
+  width: 100%;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-text {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: white;
+  font-weight: 500;
+}
+
+.footer-authors {
+  margin: 0;
+  font-size: 13px;
+  color: #f5f5f5;
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 20px 16px;
+  }
+  
+  .footer-text {
+    font-size: 13px;
+  }
+  
+  .footer-authors {
+    font-size: 12px;
+  }
+}

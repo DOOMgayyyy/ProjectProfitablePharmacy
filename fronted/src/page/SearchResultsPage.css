@@ -1,6 +1,8 @@
 .search-results-page {
   min-height: 100vh;
   background: #f8f9fa;
+  display: flex;
+  flex-direction: column;
 }
 
 .search-results-page .search-container {
@@ -12,17 +14,13 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.search-results-page .categories-modal-container {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 0 20px;
-}
 
 .search-results-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   margin-top: 10px;
+  flex: 1;
 }
 
 .search-header {
@@ -34,6 +32,7 @@
   background: white;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-height: 80px;
 }
 
 .search-header-left {
@@ -163,6 +162,9 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
 }
 
 .medicine-card:hover {
@@ -173,8 +175,9 @@
 .medicine-header {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex: 1;
 }
 
 .medicine-header h3 {
@@ -186,15 +189,18 @@
 
 .medicine-image {
   width: 100%;
-  height: 120px;
-  object-fit: cover;
+  height: 200px;
+  object-fit: contain;
   border-radius: 6px;
+  background: #f8f9fa;
+  padding: 8px;
 }
 
 .prices {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: auto;
 }
 
 .price {
@@ -218,10 +224,6 @@
     padding: 15px;
   }
   
-  .search-results-page .categories-modal-container {
-    margin: 10px auto;
-    padding: 0 10px;
-  }
   
   .search-results-container {
     padding: 10px;
@@ -274,6 +276,7 @@
   
   .medicine-card {
     padding: 12px;
+    height: 350px;
   }
   
   .medicine-header h3 {
@@ -281,7 +284,7 @@
   }
   
   .medicine-image {
-    height: 100px;
+    height: 150px;
   }
   
   .price {
