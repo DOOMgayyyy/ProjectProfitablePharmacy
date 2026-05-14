@@ -8,7 +8,7 @@
 | date_parse | date |  | время последнего парсинга |
 | medecine_url | string |  | юрл на конкретное лекарство |
 
-**pharmancys**
+**pharmacies**
 | name | type | comment | Description |
 |-|-|-|-|
 | id | integer | primary key | Уникальный id аптеки |
@@ -23,7 +23,8 @@
 | normalize_name | string |  | транслитовое имя |
 | description | string |  | описание лекарства |
 | manufacturer | string |  | производитель лекарства |
-| categories | string | | категория для лекарств |
+| image_url | string |  | Путь до картинки с лекарствами |
+| categories_id| integer | foreign key | Айди категорий |
 
 таблица посвящена различным категориям, откуда можно начинать парсинг
 **categories**
@@ -32,3 +33,4 @@
 | id | integer | primary key | Уникальный id лекарства |
 | categories | string | | категория для лекарств |
 | pharmancys_id | foreign key | | id аптеки откуда спаршена категория |
+| categories_url | string | | категория для лекарств |
