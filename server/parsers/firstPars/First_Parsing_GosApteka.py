@@ -25,43 +25,31 @@ class First_Parsing_GosApteka:
 
     async def getCategories(self):
         categories = []
-        #Ð·Ð°Ð´Ð°Ñ‘Ð¼ ÑÐ¾ÐºÑ€Ð°Ñ‰Ñ‘Ð½Ð½Ð¾Ðµ Ð¾Ð±Ñ€Ð°Ñ‰ÐµÐ½Ð¸Ðµ Ðº Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸
+
         async with async_playwright() as p:
-            # ÑƒÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼, Ð½ÑƒÐ¶Ð½Ñ‹Ð¹ Ð±Ñ€Ð°ÑƒÐ·ÐµÑ€ Ð´Ð»Ñ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½Ð¸Ñ ÐºÐ¾Ð´Ð¾Ð¼
             browser = await p.chromium.launch(headless=False)
             context = await browser.new_context()
-            # Ð´Ð»Ñ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹ Ñ ÑÑÑ‹Ð»ÐºÐ¾Ð¹ Ð¾Ñ‚ÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ð½Ð¾Ð²ÑƒÑŽ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ
             page = await context.new_page()
-            # Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¿Ð¾ ÑÑÑ‹Ð»ÐºÐµ Ñ‚Ðº ÐºÐ¾Ð´ ÑÐ¸Ð½Ñ…Ñ€Ð¿Ð¾Ð½Ð½Ñ‹Ð¹ Ð¶Ð´Ñ‘Ð¼ Ð¿Ð¾ÐºÐ° ÑÑ‚Ñ€Ð°Ð½Ð½Ð¸Ñ†Ð° Ð¿Ð¾Ð»Ð½Ð¾ÑÑ‚ÑŒÑŽ Ð¿Ñ€Ð¾Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑÑ
             await page.goto(self.link, wait_until="domcontentloaded", timeout=60000)
-            # Ð¾Ð±Ñ€Ð°Ñ‰Ð°ÐµÐ¼ÑÑ Ðº Ð±Ð¾Ð»ÐµÐµ ÐºÐ¾Ð½ÐºÑ€ÐµÑ‚Ð½Ñ‹Ð¼ Ð¿Ð¾Ð´ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸ÑÐ¼ Ð¸ Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ a ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ñ‰Ð¸Ð¹ Ð² ÑÐµÐ±Ðµ Ð¸ ÑÑÑ‹Ð»ÐºÑƒ Ð½Ð° ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€ÑŽ Ð¸ Ñ€ÑƒÑÐ¸Ñ„Ð¸Ñ†Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð¾Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ
             links = page.locator("div.sub_menu_item a")
             count = await links.count()
-            # Ð¿ÐµÑ€ÐµÐ±Ð¸Ñ€Ð°ÐµÐ¼ Ð²ÑÐµ Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ð²ÑˆÐ¸ÐµÑÑ Ð¾Ñ‚Ð²ÐµÑ‚Ñ‹ Ð¿Ð¾ Ð¸Ñ… ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ñƒ
             for i in range(count):
-                # Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ð½Ð¸Ðµ Ð¿Ð¾Ð»Ñ a Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ
                 a = links.nth(i)
-                # Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ð¸
                 name = (await a.inner_text()).strip()
-                # ÑÐ¾ÑÑ‚Ð°Ð²Ð»ÑÑŽÑ‰Ð°Ñ ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ð¸ ÑÑÑ‹Ð»ÐºÐ° Ð½Ð° Ð½ÐµÑ‘
                 href = await a.get_attribute("href")
                 categories.append((name, href))
-            #Ð·Ð°ÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ð±Ñ€Ð°ÑƒÐ·ÐµÑ€
             await context.close()
             await browser.close()
         for category_name, category_url in categories:
             self.db.insert_category(category_name, category_url, self.pharmansyID)
 
     async def getProductsAtCategories(self):
-        # Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ð¹ Ð¸Ð· Ð±Ð°Ð·Ð·Ñ‹ Ð´Ð°Ð½Ð½Ñ‹ÑŠ Ð¿Ð¾ id Ð°Ð¿Ñ‚ÐµÐºÐ¸
+        # получение категорий из базы данных
         categories = self.db.get_categories(self.pharmansyID)
-        # Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð½Ð° Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ðµ ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ð¹
         if not categories:
-            print("ÐšÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ð¸ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ñ‹ Ð² Ð±Ð°Ð·Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ…")
+            print("Не удалось получить категории из базы данных")
             return
-        # Ð°ÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ñ Ð¿Ð°Ñ€ÑÐµÑ€Ð°
         async with async_playwright() as p:
-            # Ð·Ð°Ð¿ÑƒÑÐºÐ°ÐµÐ¼ Ð´Ð²Ð¸Ð¶Ð¾Ðº Ð±Ñ€Ð°ÑƒÐ·ÐµÑ€Ð° chromium
             browser = await p.chromium.launch(headless=False)
             context = await browser.new_context()
             tasks = [
@@ -72,30 +60,8 @@ class First_Parsing_GosApteka:
             await context.close()
             await browser.close()
 
-    async def get_last_page(self, page, base_category_url):
-            await page.goto(base_category_url, wait_until ="domcontentloaded",  timeout=60000)
-            # Ð¿ÐµÑ€ÐµÐ¼ÐµÐ½Ð½Ð°Ñ Ð´Ð»Ñ Ð·Ð°Ð¿Ð¸ÑÐ¸ ÐºÐ¾Ð½ÐµÑ‡Ð½Ð¾Ð¹ ÑÑ‚Ñ€Ð°Ð½Ð½Ñ†Ð¸Ñ‹ ÑÑ‚Ð¾Ð¹ ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ð¸
-            last_page = 1
-
-            pagination_links = page.locator(
-                "div.bx_pagination_page ul a[href*='PAGEN_1=']"
-            )
-            pagination_count = await pagination_links.count()
-
-            for i in range(pagination_count):
-                href = await pagination_links.nth(i).get_attribute("href")
-                if href and "PAGEN_1=" in href:
-                    try:
-                        page_num = int(href.split("PAGEN_1=")[1].split("&")[0])
-                        if page_num > last_page:
-                            last_page = page_num
-                    except ValueError:
-                        pass
-
-            return last_page
 
     async def process_category(self, context, category_id, category_url):
-        # Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ ÐºÐ°Ð¾Ñ‚Ð¾Ñ€Ð°Ñ Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ñ‚ Ñ€Ð°Ð·Ð´Ñ€Ð¾Ð±Ð»ÐµÐ½Ð¸Ðµ Ð½Ð° 3 Ð°ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð½Ñ‹Ñ…
         async with self.semaphore:
             page = await context.new_page()
             try:
@@ -120,21 +86,37 @@ class First_Parsing_GosApteka:
             finally:
                 await page.close()
 
+    async def get_last_page(self, page, base_category_url):
+            await page.goto(base_category_url, wait_until ="domcontentloaded",  timeout=60000)
+            last_page = 1
+
+            pagination_links = page.locator(
+                "div.bx_pagination_page ul a[href*='PAGEN_1=']"
+            )
+            pagination_count = await pagination_links.count()
+
+            for i in range(pagination_count):
+                href = await pagination_links.nth(i).get_attribute("href")
+                if href and "PAGEN_1=" in href:
+                    try:
+                        page_num = int(href.split("PAGEN_1=")[1].split("&")[0])
+                        if page_num > last_page:
+                            last_page = page_num
+                    except ValueError:
+                        pass
+
+            return last_page
+
     async def parse_products_from_page(self,page, page_url, category_id):
         try:
-            # Ð¿ÐµÑ€ÐµÑ…Ð¾Ð´Ð¸Ð¼ Ð½Ð° ÑÑ‚Ñ€Ð°Ð½Ð½Ð¸Ñ†Ñƒ
             await page.goto(page_url, wait_until = "domcontentloaded", timeout=60000)
-            # Ð¸Ñ‰ÐµÐ¼ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ñ‹ Ñ ÐºÐ¾Ð½ÐºÑ€ÐµÑ‚Ð½Ñ‹Ð¼ ÐºÐ»Ð°ÑÑÐ¾Ð¼
             items = page.locator("div.cat-item")
-            # Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ Ð¸Ñ… ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾
-            # Ð¿ÐµÑ€ÐµÐ±Ð¸Ñ€Ð°ÐµÐ¼ Ð²ÑÐµ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð½Ñ‹Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ñ‹
             count = await items.count()
             for i in range(count):
                 item = items.nth(i)
                 title_link = item.locator("h3 a")
                 # Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ ÑÑÑ‹Ð»ÐºÑƒ Ð½Ð° Ð¿Ñ€Ð¾Ð´ÑƒÐºÑ‚
                 href = await title_link.get_attribute("href")
-                # ÐµÑÐ»Ð¸ Ð½Ð°Ð¹Ð´ÐµÐ½Ð½Ð¾ Ñ‚Ð¾ Ð·Ð°Ð½Ð¾ÑÐ¸Ð¼ Ð² Ð±Ð°Ð·Ñƒ Ð´Ð°Ð½Ð½Ñ‹
                 if href:
                     href = self.build_full_url(href)
                     self.db.insert_url_to_medicines(href, category_id)

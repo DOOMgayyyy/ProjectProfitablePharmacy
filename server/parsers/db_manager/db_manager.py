@@ -16,7 +16,7 @@ class DatabaseManager:
             f"user={os.getenv('DB_USER')} "
             f"password={os.getenv('DB_PASS')}"
         )
-################# Ð’Ð½ÐµÑÐµÐ½Ð¸Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð² Ð±Ð´ ####################
+################# InsertToDataBase ####################
     def insert_category(self, category_name, category_url, pharmacy_id):
         try:
             with psycopg.connect(self.conninfo) as conn:
@@ -30,7 +30,7 @@ class DatabaseManager:
                     )
                 conn.commit()
         except psycopg.Error as e:
-            print(f"ÐžÑˆÐ¸Ð±ÐºÐ° Ð±Ð°Ð·Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ…: {e}")
+            print(f"Error with inset categories: {e}")
 
     def insert_url_to_medicines(self, product_url, category_id):
         try:
@@ -44,28 +44,12 @@ class DatabaseManager:
                         """,
                         (product_url, category_id)
                     )
-                    print(f"Ð¡ÑÑ‹Ð»ÐºÐ°: {product_url}, ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð°")
+                    print(f"Link: {product_url}, accept from added to DB")
                     return cur.fetchall()
 
         except psycopg.Error as e:
-            print(f"ÐžÑˆÐ¸Ð±ÐºÐ° Ð±Ð°Ð·Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¿Ñ€Ð¸ Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ð¸ Ñ‚Ð¾Ð²Ð°Ñ€Ð°: {e}")
+            print(f"Error with insett url in medecines: {e}")
             return None
-
-    def insert_medecines_info(self, name, normalize_name, description, manufacturer, image_url):
-        try:
-            with psycopg.connect(self.conninfo) as conn:
-                with conn.cursor() as cur:
-                    cur.execute(
-                        """
-                        INSERT INTO medcines (name, normalize_name, description, manufacturer, image_url)
-                        VALUES(%s, %s, %s, %s, %s)
-                        RETURING id
-                        """,
-                        (name, normalize_name, description, manufacturer, image_url)
-                    )
-
-        except psycopg.Error as e:
-            print(f"ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ð½ÐµÐ½ÐµÐ½Ð¸Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¿Ð¾ Ð»ÐµÐºÐ°Ñ€ÑÑ‚Ð²Ñƒ Ð² Ð±Ð´: {e}")
 
     def isert_price_info(self, price, pharmancys_id, medecines_id, date_parse, medecine_url):
         try:
@@ -82,7 +66,7 @@ class DatabaseManager:
 
         except psycopg.Error as e:
             print(f"ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ð½ÐµÐ½ÐµÐ½Ð¸Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¿Ð¾ Ñ†ÐµÐ½Ðµ Ð² Ð±Ð´: {e}")
-################# ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¸Ð· Ð±Ð´ ####################
+################# GetAtToDataBase ####################
     def get_url_at_products(self):
         try:
             with psycopg.connect(self.conninfo) as conn:
@@ -114,3 +98,19 @@ class DatabaseManager:
         except psycopg.Error as e:
             print(f"ÐžÑˆÐ¸Ð±ÐºÐ° Ð±Ð°Ð·Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ…: {e}")
             return []
+################# UpdateInDataBase ####################
+    def update_medecines_info(self, name, normalize_name, description, manufacturer, image_url):
+        try:
+            with psycopg.connect(self.conninfo) as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """
+                        UPDATE INTO medcines (name, normalize_name, description, manufacturer, image_url)
+                        VALUES(%s, %s, %s, %s, %s)
+                        RETURING id
+                        """,
+                        (name, normalize_name, description, manufacturer, image_url)
+                    )
+
+        except psycopg.Error as e:
+            print(f"ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ð½ÐµÐ½ÐµÐ½Ð¸Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¿Ð¾ Ð»ÐµÐºÐ°Ñ€ÑÑ‚Ð²Ñƒ Ð² Ð±Ð´: {e}")
