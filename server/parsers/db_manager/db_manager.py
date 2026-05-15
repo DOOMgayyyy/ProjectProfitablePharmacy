@@ -1,10 +1,7 @@
-# db_manager/db_manager.py
 import os
 import psycopg
 from pathlib import Path
 from dotenv import load_dotenv
-
-
 class DatabaseManager:
     def __init__(self):
         env_path = Path(__file__).resolve().parents[1] / ".env"
@@ -30,7 +27,7 @@ class DatabaseManager:
                     )
                 conn.commit()
         except psycopg.Error as e:
-            print(f"Error with inset categories: {e}")
+            print(f"Ошибка базы данных: {e}")
 
     def insert_url_to_medicines(self, product_url, category_id):
         try:
@@ -44,29 +41,40 @@ class DatabaseManager:
                         """,
                         (product_url, category_id)
                     )
-                    print(f"Link: {product_url}, accept from added to DB")
+                    print(f"Ссылка: {product_url}, успешно добавлена")
                     return cur.fetchall()
 
         except psycopg.Error as e:
-            print(f"Error with insett url in medecines: {e}")
+            print(f"Ошибка базы данных при добавлении товара: {e}")
             return None
 
-    def isert_price_info(self, price, pharmancys_id, medecines_id, date_parse, medecine_url):
+    def insert_price_info(self, price, pharmacy_id, medicine_id, date_parse, medicine_url):
         try:
             with psycopg.connect(self.conninfo) as conn:
                 with conn.cursor() as cur:
                     cur.execute(
                         """
-                        INSERT INTO medcines (price, pharmancys_id, medecines_id, date_parse, medecine_url)
-                        VALUES(%s, %s, %s, %s, %s)
-                        RETURING id
+                        INSERT INTO prices (price, pharmacy_id, medicine_id, date_parse, medicine_url)
+                        VALUES (%s, %s, %s, %s, %s)
+                        RETURNING id
                         """,
-                        (price, pharmancys_id, medecines_id, date_parse, medecine_url)
+                        (price, pharmacy_id, medicine_id, date_parse, medicine_url),
                     )
+                    row = cur.fetchone()
+                    conn.commit()
+
+            if row is None:
+                # на всякий случай лог
+                print("WARNING: INSERT INTO prices вернул None в fetchone()")
+                return None
+
+            price_id = row[0]
+            return price_id
 
         except psycopg.Error as e:
-            print(f"ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ð½ÐµÐ½ÐµÐ½Ð¸Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¿Ð¾ Ñ†ÐµÐ½Ðµ Ð² Ð±Ð´: {e}")
-################# GetAtToDataBase ####################
+            print(f"Ошибка при внесении данных по цене в бд: {e}")
+            return None
+################# Получение данных из бд ####################
     def get_url_at_products(self):
         try:
             with psycopg.connect(self.conninfo) as conn:
@@ -79,12 +87,12 @@ class DatabaseManager:
                     )
                     return cur.fetchall()
         except psycopg.Error as e:
-            print(f"ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ñ Ñ‚Ð¾Ð²Ð°Ñ€Ð¾Ð² Ð¸Ð· Ð±Ð°Ð·Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ…: {e}")
+            print(f"Ошибка получения товаров из базы данных: {e}")
 
     def get_categories(self, pharmacy_id):
         try:
             with psycopg.connect(self.conninfo) as conn:
-                print("Ð£ÑÐ¿ÐµÑˆÐ½Ð¾Ðµ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ðº Ð±Ð°Ð·Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ…")
+                print("Успешное подключение к базе данных")
                 with conn.cursor() as cur:
                     cur.execute(
                         """
@@ -96,21 +104,43 @@ class DatabaseManager:
                     )
                     return cur.fetchall()
         except psycopg.Error as e:
-            print(f"ÐžÑˆÐ¸Ð±ÐºÐ° Ð±Ð°Ð·Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ…: {e}")
+            print(f"Ошибка базы данных: {e}")
             return []
-################# UpdateInDataBase ####################
-    def update_medecines_info(self, name, normalize_name, description, manufacturer, image_url):
+#####Обновление записей в базе данных######
+    def update_medicine_info(self, medicine_id, name, normalize_name, description, manufacturer, image_url):
         try:
             with psycopg.connect(self.conninfo) as conn:
                 with conn.cursor() as cur:
                     cur.execute(
                         """
-                        UPDATE INTO medcines (name, normalize_name, description, manufacturer, image_url)
-                        VALUES(%s, %s, %s, %s, %s)
-                        RETURING id
+                        UPDATE medicines
+                        SET
+                            name = %s,
+                            normalize_name = %s,
+                            description = %s,
+                            manufacturer = %s,
+                            image_url = %s
+                        WHERE id = %s
                         """,
-                        (name, normalize_name, description, manufacturer, image_url)
+                        (name, normalize_name, description, manufacturer, image_url, medicine_id)
                     )
-
+                    conn.commit()
         except psycopg.Error as e:
-            print(f"ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ð½ÐµÐ½ÐµÐ½Ð¸Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¿Ð¾ Ð»ÐµÐºÐ°Ñ€ÑÑ‚Ð²Ñƒ Ð² Ð±Ð´: {e}")
+            print(f"Ошибка при обновлении данных по лекарству в бд: {e}")
+
+
+
+##################### Удалить все записи ####################################
+    def delete_all_medecines(self):
+        try:
+            with psycopg.connect(self.conninfo) as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                    """
+                    DELETE FROM medicines
+                    """,
+                    )
+                    return cur.rowcount
+        except psycopg.Error as e:
+            print(f"Ошибка базы данных: {e}")
+            return []
