@@ -66,3 +66,8 @@ GRANT ALL PRIVILEGES ON TABLES TO user_farm;
 
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
 GRANT ALL PRIVILEGES ON SEQUENCES TO user_farm;
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX IF NOT EXISTS medicines_normalize_name_trgm_idx
+ON medicines
+USING GIN (normalize_name gin_trgm_ops);
