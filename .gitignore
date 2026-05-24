@@ -2,7 +2,7 @@
 /client/node_modules
 /node_modules
 # Ignore node_modules in server directory
-/server/node_modules
+/server/backend/node_modules
 /server/parsers/.venv
 # Ignore environment variable files
 .env
