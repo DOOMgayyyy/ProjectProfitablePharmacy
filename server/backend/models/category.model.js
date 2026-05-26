@@ -1,6 +1,10 @@
 const db = require('../config/db');
 
-// Все категории конкретной аптеки
+const getCategoryByUrl = (url) =>
+  db.oneOrNone(
+    'SELECT * FROM categories WHERE categories_url = $1',
+    [url]
+  );
 
 const getCategoryById = (id) =>
   db.oneOrNone(
@@ -8,13 +12,7 @@ const getCategoryById = (id) =>
     [id]
   );
 
-const getCategoryByUrl = (url) =>
-  db.oneOrNone(
-    'SELECT * FROM categories WHERE categories_url = $1',
-    [url]
-  );
-
 module.exports = {
-  getCategoryById,
   getCategoryByUrl,
+  getCategoryById,
 };
