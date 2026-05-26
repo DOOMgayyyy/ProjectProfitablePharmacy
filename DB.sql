@@ -42,7 +42,7 @@ CREATE TABLE prices (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     price DOUBLE PRECISION,
     pharmacy_id INTEGER NOT NULL,
-    medicine_id INTEGER NOT NULL,
+    medicine_id INTEGER ,
     date_parse DATE,
     medicine_url TEXT,
     CONSTRAINT fk_prices_pharmacy
