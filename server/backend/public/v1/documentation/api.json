@@ -1,0 +1,308 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API каталога интернет-аптеки. Позволяет получать список товаров по категориям, искать лекарства и БАДы, просматривать карточку товара. Все ответы возвращаются в формате JSON.",
+    "version": "1.0.0",
+    "title": "Pharmacy Catalog API",
+    "termsOfService": "http://example.com/terms/",
+    "contact": {
+      "email": "api@pharmacy.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "api.pharmacy.com",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "catalog",
+      "description": "Работа с каталогом: категории, поиск, карточки товаров"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/catalog/{slug}": {
+      "get": {
+        "tags": ["catalog"],
+        "summary": "Получить товары категории",
+        "description": "Возвращает список товаров, относящихся к указанной категории (slug). Поддерживается сортировка по цене.",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "Уникальный идентификатор категории (например, 'zdorovoe_pitanie', 'protivovirusnye')",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Поле для сортировки. Сейчас поддерживается только сортировка по цене.",
+            "required": false,
+            "type": "string",
+            "enum": ["price"],
+            "default": "price"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "Порядок сортировки: возрастание (asc) или убывание (desc).",
+            "required": false,
+            "type": "string",
+            "enum": ["asc", "desc"],
+            "default": "asc"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ. Возвращает массив товаров в категории.",
+            "schema": {
+              "$ref": "#/definitions/CatalogResponse"
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры запроса (неверное значение sort/order).",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Категория с указанным slug не найдена.",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "tags": ["catalog"],
+        "summary": "Поиск товаров",
+        "description": "Осуществляет полнотекстовый поиск по наименованию, действующему веществу или описанию товара.",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Поисковый запрос (например, 'парацетамол', 'витамин C')",
+            "required": true,
+            "type": "string",
+            "minLength": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный поиск. Возвращает массив найденных товаров (может быть пустым).",
+            "schema": {
+              "$ref": "#/definitions/SearchResponse"
+            }
+          },
+          "400": {
+            "description": "Отсутствует обязательный параметр q.",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/medicine/{id}": {
+      "get": {
+        "tags": ["catalog"],
+        "summary": "Получить полную информацию о товаре",
+        "description": "Возвращает детальную карточку лекарства или БАДа по его уникальному идентификатору.",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Уникальный идентификатор товара (числовой или строковый)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Товар найден, возвращены его полные данные.",
+            "schema": {
+              "$ref": "#/definitions/MedicineResponse"
+            }
+          },
+          "404": {
+            "description": "Товар с указанным id не существует или удалён.",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Medicine": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "med_123456",
+          "description": "Уникальный идентификатор товара"
+        },
+        "name": {
+          "type": "string",
+          "example": "Парацетамол 500 мг",
+          "description": "Название препарата"
+        },
+        "price": {
+          "type": "number",
+          "format": "float",
+          "example": 250.50,
+          "description": "Цена в рублях"
+        },
+        "old_price": {
+          "type": "number",
+          "format": "float",
+          "example": 320.00,
+          "description": "Старая цена (если есть скидка)"
+        },
+        "image_url": {
+          "type": "string",
+          "example": "https://api.pharmacy.com/images/paracetamol.jpg",
+          "description": "URL основного изображения"
+        },
+        "category_slug": {
+          "type": "string",
+          "example": "protivovirusnye",
+          "description": "Slug категории товара"
+        },
+        "short_description": {
+          "type": "string",
+          "example": "Жаропонижающее и обезболивающее средство",
+          "description": "Краткое описание"
+        },
+        "full_description": {
+          "type": "string",
+          "example": "Полное описание с показаниями, противопоказаниями...",
+          "description": "Детальное описание (может быть HTML/plain text)"
+        }
+      }
+    },
+    "CatalogResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "category": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "Здоровое питание"
+            },
+            "slug": {
+              "type": "string",
+              "example": "zdorovoe_pitanie"
+            },
+            "description": {
+              "type": "string",
+              "example": "Продукты для правильного питания, БАДы, витамины"
+            }
+          }
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Medicine"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32",
+          "example": 42,
+          "description": "Общее количество товаров в категории (без учёта пагинации)"
+        }
+      }
+    },
+    "SearchResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "query": {
+          "type": "string",
+          "example": "парацетамол"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Medicine"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32",
+          "example": 7
+        }
+      }
+    },
+    "MedicineResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "data": {
+          "$ref": "#/definitions/Medicine"
+        },
+        "related_products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Medicine"
+          },
+          "description": "Сопутствующие или рекомендуемые товары (опционально)"
+        }
+      }
+    },
+    "ApiErrorResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": false
+        },
+        "error": {
+          "type": "string",
+          "example": "Category not found"
+        },
+        "code": {
+          "type": "string",
+          "example": "CATEGORY_NOT_FOUND"
+        }
+      }
+    },
+    "ApiSuccessResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Operation completed successfully"
+        }
+      }
+    }
+  }
+}

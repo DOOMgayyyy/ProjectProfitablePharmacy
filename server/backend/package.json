@@ -1,7 +1,17 @@
 {
+  "name": "server",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "nodemon bin/server.js",
+    "start": "node bin/server.js"
+  },
   "dependencies": {
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "pg-promise": "^12.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
