@@ -346,7 +346,7 @@ class First_Parsing_GosApteka:
 async def main():
     parser = First_Parsing_GosApteka()
     # await parser.getCategories()
-    # await parser.getProductsAtCategories()
+    await parser.getProductsAtCategories()
     await parser.get_product_at_pages()
     # await parser.delete()
 

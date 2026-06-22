@@ -5,7 +5,7 @@ const SORT_COLUMNS = { name: 'm.name', price: 'min_price' };
 const ORDER_DIRS   = { asc: 'ASC',    desc: 'DESC' };
 
 // Карточки по категории + сортировка
-const getMedicinesByCategoryId = (categoryId, sort = 'name', order = 'asc') => {
+const getMedicinesByCategoryId = (categoryId, sort = 'name', order = 'asc', limit = 30, offset = 0) => {
   const col = SORT_COLUMNS[sort]  || 'm.name';
   const dir = ORDER_DIRS[order]   || 'ASC';
 
@@ -19,13 +19,14 @@ const getMedicinesByCategoryId = (categoryId, sort = 'name', order = 'asc') => {
      LEFT JOIN prices p ON p.medicine_id = m.id
      WHERE m.category_id = $1
      GROUP BY m.id
-     ORDER BY ${col} ${dir}`,
-    [categoryId]
+     ORDER BY ${col} ${dir}
+     LIMIT $2 OFFSET $3`,
+    [categoryId, limit, offset]
   );
 };
 
 // Поиск через pg_trgm + сортировка
-const searchMedicines = (query, sort = 'name', order = 'asc') => {
+const searchMedicines = (query, sort = 'name', order = 'asc', limit = 30, offset = 0) => {
   const col = SORT_COLUMNS[sort] || 'm.name';
   const dir = ORDER_DIRS[order]  || 'ASC';
 
@@ -40,8 +41,8 @@ const searchMedicines = (query, sort = 'name', order = 'asc') => {
      WHERE similarity(m.normalize_name, $1) > 0.2
      GROUP BY m.id
      ORDER BY ${col} ${dir}
-     LIMIT 30`,
-    [query]
+     LIMIT $2 OFFSET $3`,
+    [query, limit, offset]
   );
 };
 
