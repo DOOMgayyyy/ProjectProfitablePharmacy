@@ -164,6 +164,34 @@ class DatabaseManager:
             return []
 
     """
+    * Функция для получения уникальных ссылок на товары из таблицы prices по id аптеки
+    * Используется в reParsers для обхода только тех URL, которые уже были спаршены
+    * @param pharmacy_id - id аптеки
+    * @return список кортежей (price_id, medicine_id, medicine_url)
+    """
+    def get_urls_from_prices(self, pharmacy_id):
+        try:
+            with psycopg.connect(self.conninfo) as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """
+                        SELECT DISTINCT ON (medicine_url)
+                            id,
+                            medicine_id,
+                            medicine_url
+                        FROM prices
+                        WHERE pharmacy_id = %s
+                          AND medicine_url IS NOT NULL
+                        ORDER BY medicine_url, date_parse DESC
+                        """,
+                        (pharmacy_id,)
+                    )
+                    return cur.fetchall()
+        except psycopg.Error as e:
+            print(f"Ошибка получения URL из prices: {e}")
+            return []
+
+    """
     * Функция для поиска лекарства по нормализованному имени с помощью trigram similarity
     * Используется для поиска наиболее похожего лекарства в таблице medicines
     * @param normalize_name - нормализованное название лекарства
@@ -238,6 +266,31 @@ class DatabaseManager:
                     conn.commit()
         except psycopg.Error as e:
             print(f"Ошибка при обновлении данных по лекарству в бд: {e}")
+
+    """
+    * Функция для обновления цены в таблице prices по id записи
+    * Используется в reParsers для актуализации цен без создания новой записи
+    * @param price_id - id записи в таблице prices
+    * @param new_price - новая цена
+    * @param new_date - новая дата парсинга (datetime.date)
+    """
+    def update_price(self, price_id, new_price, new_date):
+        try:
+            with psycopg.connect(self.conninfo) as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """
+                        UPDATE prices
+                        SET
+                            price = %s,
+                            date_parse = %s
+                        WHERE id = %s
+                        """,
+                        (new_price, new_date, price_id)
+                    )
+                    conn.commit()
+        except psycopg.Error as e:
+            print(f"Ошибка при обновлении цены (id={price_id}): {e}")
 
     ##################### Удаление записей ####################
 
