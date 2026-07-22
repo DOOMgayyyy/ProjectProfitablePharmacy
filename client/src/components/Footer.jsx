@@ -1,19 +1,21 @@
-import React from 'react';
 import './Footer.css';
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <footer className="footer">
-      <div className="footer-content">
-        <p className="footer-text">
-          Выгодная аптека 2025. Проект был реализован в ходе летней практикой.
-        </p>
-        <p className="footer-authors">
-          Авторы: Самарин Михаил, Моромов Никита, Лотов Иван
-        </p>
+    <footer className="cp-footer">
+      <div className="cp-footer__line" />
+      <div className="cp-footer__inner">
+        <span className="cp-footer__copy">
+          <span className="cp-tag">PHARMA//NET</span> © {new Date().getFullYear()} — агрегатор цен на лекарства
+        </span>
+        <div className="cp-footer__credits">
+          <span>Планета Здоровья</span>
+          <span className="sep">|</span>
+          <span>Бережная Аптека</span>
+          <span className="sep">|</span>
+          <span>ГосАптека</span>
+        </div>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}
